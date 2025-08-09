@@ -1,8 +1,10 @@
 # python == 3.12
-torch
-transformers
-peft
-bitsandbytes
+torch==2.7.1
+torchaudio==2.7.1
+torchvision==0.22.1
+transformers==4.53.3
+peft==0.16.0
+bitsandbytes==0.46.1
 datasets
 evaluate
 wandb
