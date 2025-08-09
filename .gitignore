@@ -8,3 +8,4 @@ cache/*
 *.out
 reproduce_result/*
 *tmp*
+find_models/*
