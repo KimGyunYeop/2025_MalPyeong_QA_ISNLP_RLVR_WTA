@@ -11,16 +11,16 @@ conda create -n test python==3.12
 conda activate test
 
 pip install -r requirements.txt
-#flash attention(flash-attn) issue 많음 **설치 비추천**
+#flash attention(flash-attn) issue 많음
 pip install flash-attn==2.8.1 --no-build-isolation 
 ```
 ### !! flash attention
 
 - flash-attn(pip install flash-attn --no-build-isolation)의 경우에는 사용자의 pc환경에 따라 다운로드 및 빌드가 매우 오래걸릴수 있다(본 참가팀은 4시간 소모되었으며 몇일 단위로 걸린다는 github issue 존재)
-- flash-attn이 설치 불가능한 경우 사전학습 모델을 loading하는 과정에서 “attn_implementation= "flash_attention_2"”를 주석처리하거나 --no_flash_attention을 argument로 입력하면 작동하지만 실험 시간이 증가하며 결과값이 미세하게 다르게나올 수 있다. (reproduce_test code 재현결과 test set의 서술형 200문항 중 25개의 답안에서 약간의 차이 발생)
+- flash-attn이 설치 불가능한 경우 --no_flash_attention을 argument로 입력하면 작동하지만 실험 시간이 증가하며 결과값이 미세하게 다르게나올 수 있다. (reproduce_test code 재현결과 test set의 서술형 200문항 중 25개의 답안에서 약간의 차이 발생)
 - cuda가 root계정 위치에 설치되어있지 않으면 설치 불가
 - flash attention의 경우 하드웨어 환경 및 가상환경에 따라 작동 방식 및 여부가 다른데, 이를 fallback으로 처리하는 과정에서 beam search 환경에서는 결과가 크게 달라지기도한다.
-- 실험해본결과 flash attention을 사용했을때 rtx 3090 에서의 결과와 rtx 4090에서의 결과가 다른데 flash attention을 껏을때는 동일한 결과를 보였다. **그렇기에 동일 환경을 조성하기 힘들다면 점수 재현을 위한 실험에서는 일부 서술형 답안의 차이를 감안하더라도 flash attention을 사용하지 않는 환경을 추천한다.**
+- **그렇기에 flash-attn 환경을 조성하기 힘들다면 점수 재현을 위한 실험에서는 일부 서술형 답안의 차이를 감안하더라도 flash attention을 사용하지 않는 환경을 추천한다.**
 
 # Dataset Setting
 
@@ -64,7 +64,6 @@ CUDA_VISIBLE_DEVICES=0 python -u main.py \
     --wta_reward_stretegy "cand_max" \
     --generation_reward_scale 5.0 \
     --reward_scale 1.0 \
-    --no_flash_attention \
     --test \
     --testing_every_epoch 1 \
     --run_name "analysis" \
@@ -81,14 +80,13 @@ CUDA_VISIBLE_DEVICES=0 python -u main.py \
 
 Midm의 시스템 프롬프트의 날짜정보를 하드코딩하여 완전재현 목적 
 ```
-bash reproduce_test_no_flash_attn.sh
-# bash reproduce_test.sh 
+bash reproduce_test.sh 
+# bash reproduce_test_no_flash_attn.sh #flash attention 환경 조성이 힘들거나 bash reproduce_test.sh 시 score가 재현이 안됐을시 시도
 ```
 or
 ```
 CUDA_VISIBLE_DEVICES=0 python -u reproduce_test.py \
     --adapter_path "GyunYeop/midm-base-GRPO-tuning-KoreanCultureQA" \
-    --no_flash_attention \
     --device "cuda:0"
 ```
 
@@ -105,7 +103,6 @@ or
 ```
 CUDA_VISIBLE_DEVICES=0 python -u test.py \
     --adapter_path "GyunYeop/midm-base-GRPO-tuning-KoreanCultureQA" \
-    --no_flash_attention \
     --num_beams 5 \
     --device "cuda:0"
 ```
@@ -125,7 +122,6 @@ CUDA_VISIBLE_DEVICES=0 python -u main.py \
     --lora_alpha 32 \
     --testing_every_epoch 5 \
     --general_prompt_path "prompts/공용프롬프트.txt" \
-    --no_flash_attention \
     --test \
     --run_name "finetuning/lora_15epoch" \
     --device "cuda:0"
