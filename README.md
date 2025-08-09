@@ -11,7 +11,7 @@ conda create -n test python==3.12
 conda activate test
 
 pip install -r requirements.txt
-#flash attention(flash-attn) issue 많음
+#flash attention(flash-attn) issue 많음 설치 비추천
 pip install flash-attn --no-build-isolation 
 ```
 ### !! flash attention
