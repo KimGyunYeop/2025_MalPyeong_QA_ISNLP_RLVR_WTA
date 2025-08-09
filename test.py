@@ -255,6 +255,7 @@ def parse_args():
     parser.add_argument("--adapter_path", type=str, default=None, required=True, help="Path to the model checkpoint")
     parser.add_argument("--device", type=str, default="auto", help="Device to load the model on (default: cpu)")
     parser.add_argument("--cache_dir", type=str, default=None, help="Directory to cache the model")
+    parser.add_argument("--no_flash_attention", action="store_true", help="Disable flash attention")
     
     parser.add_argument("--num_beams", type=int, default=5, help="Number of beams for beam search")
     
@@ -267,8 +268,6 @@ def parse_args():
     parser.add_argument("--prompt_mode", type=str, default="general", choices=["general"], help="Mode for prompt generation")
     parser.add_argument("--fewshot_mode", type=str, default="static", choices=["none", "mix_static", "static"], help="Mode for few-shot learning")
     parser.add_argument("--num_fewshot", type=int, default=5, help="Number of few-shot examples to use")
-    
-    parser.add_argument("--no_flash_attention", action="store_true", help="Disable flash attention")
     
     parser.add_argument("--run_name", type=str, default="test", help="Name of the run for logging purposes")
     

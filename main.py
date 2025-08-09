@@ -567,6 +567,7 @@ def parse_args():
     parser.add_argument("--gradient_accumulation_steps", type=int, default=2, help="Number of gradient accumulation steps")
     parser.add_argument("--lr_scheduler_type", type=str, default="cosine", choices=["linear", "cosine", "cosine_with_restarts", "polynomial", "constant", "constant_with_warmup"], help="Learning rate scheduler type")
     parser.add_argument("--warmup_ratio", type=float, default=0.03, help="Warmup ratio for learning rate scheduler")
+    parser.add_argument("--no_flash_attention", action="store_true", default=False, help="Disable flash attention")
 
     # lora configurations
     parser.add_argument("--lora_mode", type=str, default=None, choices=["lora"], help="LoRA mode to use")
@@ -645,13 +646,22 @@ def main():
         llm_int8_skip_modules=["lm_head"]        # 출력층은 FP16
     )
     
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, 
-                                                    device_map=args.device, 
-                                                    cache_dir=args.cache_dir, 
-                                                    trust_remote_code=True,
-                                                    quantization_config=bnb_config,     # QLoRA 
-                                                    attn_implementation="flash_attention_2",  # Flash Attention 2
-                                                    )
+    if args.no_flash_attention:
+        base_model = AutoModelForCausalLM.from_pretrained(args.model_name, 
+                                                        device_map=args.device, 
+                                                        cache_dir=args.cache_dir, 
+                                                        trust_remote_code=True,
+                                                        quantization_config=bnb_config,     # ★ QLoRA 핵심
+                                                        # attn_implementation="flash_attention_2",  # Flash Attention 2
+                                                        )
+    else:
+        base_model = AutoModelForCausalLM.from_pretrained(args.model_name, 
+                                                        device_map=args.device, 
+                                                        cache_dir=args.cache_dir, 
+                                                        trust_remote_code=True,
+                                                        quantization_config=bnb_config,     # ★ QLoRA 핵심
+                                                        attn_implementation="flash_attention",  # Flash Attention
+                                                        )
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
     generation_config= GenerationConfig.from_pretrained(args.model_name, cache_dir=args.cache_dir)
     

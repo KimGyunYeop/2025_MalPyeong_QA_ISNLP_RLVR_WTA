@@ -273,10 +273,11 @@ def parse_args():
     parser.add_argument("--adapter_path", type=str, default=None, required=True, help="Path to the model checkpoint")
     parser.add_argument("--device", type=str, default="auto", help="Device to load the model on (default: cpu)")
     parser.add_argument("--cache_dir", type=str, default=None, help="Directory to cache the model")
+    parser.add_argument("--no_flash_attention", action="store_true", help="Disable flash attention")
     
     # data configurations
     parser.add_argument("--train_data_path", type=str, default="data/QA/korean_culture_qa_V1.0_train+.json", help="Path to training data for custom dataset")
-    parser.add_argument("--dev_data_path", type=str, default="data/QA/korean_culture_qa_V1.0_dev+.json", help="Path to prompt generator script")
+    parser.add_argument("--dev_data_path", type=str, default=None, help="Path to prompt generator script")
     parser.add_argument("--test_data_path", type=str, default="data/QA/korean_culture_qa_V1.0_test+.json", help="Path to test data for custom dataset")
     parser.add_argument("--general_prompt_path", type=str, default="prompts/COT공용프롬프트.txt", help="Path to generation prompt script")
     
@@ -331,8 +332,10 @@ def main():
     print(f"Pad token set to EOS token: {tokenizer.pad_token}")
     
     prompt_generator = PromptGenerator(args, args.train_data_path)
-    dev_dataset_for_test = CustomDatasetForTest(args.dev_data_path, tokenizer, prompt_generator)
-    test_dataset = CustomDatasetForTest(args.test_data_path, tokenizer, prompt_generator)
+    if args.dev_data_path:
+        dev_dataset_for_test = CustomDatasetForTest(args.dev_data_path, tokenizer, prompt_generator)
+    if args.test_data_path:
+        test_dataset = CustomDatasetForTest(args.test_data_path, tokenizer, prompt_generator)
     
     print(f"Dev dataset size: {len(dev_dataset_for_test)}")
     print(f"Test dataset size: {len(test_dataset)}")
@@ -356,25 +359,27 @@ def main():
     
     print("Starting testing...")
     os.makedirs(save_path, exist_ok=True)
-    dev_results, dev_whole_data = test(args, model, tokenizer, dev_dataset_for_test, generate_args, post_process_fn)
-    with open(f"{save_path}/dev_results.json", 'w', encoding='utf-8') as f:
-        json.dump(dev_results, f, ensure_ascii=False, indent=4)
-    with open(f"{save_path}/dev_whole_data.json", 'w', encoding='utf-8') as f:
-        json.dump(dev_whole_data, f, ensure_ascii=False, indent=4)
+    if args.dev_data_path:
+        dev_results, dev_whole_data = test(args, model, tokenizer, dev_dataset_for_test, generate_args, post_process_fn)
+        with open(f"{save_path}/dev_results.json", 'w', encoding='utf-8') as f:
+            json.dump(dev_results, f, ensure_ascii=False, indent=4)
+        with open(f"{save_path}/dev_whole_data.json", 'w', encoding='utf-8') as f:
+            json.dump(dev_whole_data, f, ensure_ascii=False, indent=4)
+            
+        dev_score = evaluation_korean_contest_culture_QA(dev_dataset_for_test.data, dev_results)
+        with open(f"{save_path}/dev_score.json", 'w', encoding='utf-8') as f:
+            json.dump(dev_score, f, ensure_ascii=False, indent=4)
         
-    dev_score = evaluation_korean_contest_culture_QA(dev_dataset_for_test.data, dev_results)
-    with open(f"{save_path}/dev_score.json", 'w', encoding='utf-8') as f:
-        json.dump(dev_score, f, ensure_ascii=False, indent=4)
-        
-    # print(f"Testing dev dataset completed and results saved. \nScore: {dev_score}\n\n============================\n")
+        print(f"Testing dev dataset completed and results saved. \nScore: {dev_score}\n\n============================\n")
     
-    test_results, test_whole_data = test(args, model, tokenizer, test_dataset, generate_args, post_process_fn)
-    with open(f"{save_path}/test_results.json", 'w', encoding='utf-8') as f:
-        json.dump(test_results, f, ensure_ascii=False, indent=4)
-    with open(f"{save_path}/test_whole_data.json", 'w', encoding='utf-8') as f:
-        json.dump(test_whole_data, f, ensure_ascii=False, indent=4)
-        
-    print(f"Testing test dataset completed and results saved.")
+    if args.test_data_path:
+        test_results, test_whole_data = test(args, model, tokenizer, test_dataset, generate_args, post_process_fn)
+        with open(f"{save_path}/test_results.json", 'w', encoding='utf-8') as f:
+            json.dump(test_results, f, ensure_ascii=False, indent=4)
+        with open(f"{save_path}/test_whole_data.json", 'w', encoding='utf-8') as f:
+            json.dump(test_whole_data, f, ensure_ascii=False, indent=4)
+            
+        print(f"Testing test dataset completed and results saved.")
     
     
         
