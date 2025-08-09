@@ -17,7 +17,7 @@ pip install flash-attn==2.8.1 --no-build-isolation
 ### !! flash attention
 
 - flash-attn(pip install flash-attn --no-build-isolation)의 경우에는 사용자의 pc환경에 따라 다운로드 및 빌드가 매우 오래걸릴수 있다(본 참가팀은 4시간 소모되었으며 몇일 단위로 걸린다는 github issue 존재)
-- flash-attn이 설치 불가능한 경우 --no_flash_attention을 argument로 입력하면 작동하지만 실험 시간이 증가하며 결과값이 미세하게 다르게나올 수 있다. (reproduce_test code 재현결과 test set의 서술형 200문항 중 25개의 답안에서 약간의 차이 발생)
+- flash-attn이 설치 불가능한 경우 --no_flash_attention을 argument로 입력하면 작동하지만 실험 시간이 증가하며 결과값이 미세하게 다르게나올 수 있다. (reproduce_test code에서 flash attention을 끄고 재현한 결과 test set의 서술형 200문항 중 25개의 답안에서 약간의 차이 발생 나머지 문제유형은 동일)
 - cuda가 root계정 위치에 설치되어있지 않으면 설치 불가
 - flash attention의 경우 하드웨어 환경 및 가상환경에 따라 작동 방식 및 여부가 다른데, 이를 fallback으로 처리하는 과정에서 beam search 환경에서는 결과가 크게 달라지기도한다.
 - **그렇기에 flash-attn 환경을 조성하기 힘들다면 점수 재현을 위한 실험에서는 일부 서술형 답안의 차이를 감안하더라도 flash attention을 사용하지 않는 환경을 추천한다.**
