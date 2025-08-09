@@ -1,6 +1,6 @@
 # !/bin/bash
 
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 wandb offline
 adapter_path="GyunYeop/midm-base-GRPO-tuning-KoreanCultureQA"
@@ -12,5 +12,4 @@ python -u reproduce_test.py \
     --adapter_path "$adapter_path" \
     --dev_data_path "$dev_data_path" \
     --test_data_path "$test_data_path" \
-    --cache_dir "cache" \
     --device "cuda:0"

@@ -263,7 +263,7 @@ def test(args, model, tokenizer, test_dataset, generate_args, post_process_fn=No
                 
             print(f"\n\nTest {i+1}/{len(test_loader)}: \nQuestion: {test_data[i]['input']['question']}")
             print(f"Expected: {expected_answer}\nPredicted: {test_data[i]['output']['answer']}\nCoT:{generated_text.split('assistant')[-1].strip()}")
-            with open(f"reproduce_result/tmp.json", 'w', encoding='utf-8') as f:
+            with open(f"{args.run_name}/tmp.json", 'w', encoding='utf-8') as f:
                 json.dump(whole_data, f, ensure_ascii=False, indent=4)
     
     return test_data, whole_data
@@ -307,7 +307,7 @@ def main():
                                                     cache_dir=args.cache_dir, 
                                                     trust_remote_code=True,
                                                     quantization_config=bnb_config,     # ★ QLoRA 핵심
-                                                    # attn_implementation="flash_attention_2",  # Flash Attention 2
+                                                    attn_implementation="flash_attention_2",  # Flash Attention 2
                                                     )
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
     generation_config= GenerationConfig.from_pretrained(args.model_name, cache_dir=args.cache_dir)

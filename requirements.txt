@@ -13,4 +13,5 @@ konlpy
 mecab
 nltk
 tqdm
+ninja
 # flash_attn # install after installing torch
