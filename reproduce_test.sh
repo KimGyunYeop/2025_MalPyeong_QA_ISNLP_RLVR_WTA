@@ -1,6 +1,6 @@
 # !/bin/bash
 
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=1
 
 wandb offline
 adapter_path="GyunYeop/midm-base-GRPO-tuning-KoreanCultureQA"
