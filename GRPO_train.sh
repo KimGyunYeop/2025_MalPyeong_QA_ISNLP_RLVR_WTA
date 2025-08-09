@@ -1,7 +1,7 @@
 #/bin/bash
 
 wandb offline
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 train_data_path="data/QA/korean_culture_qa_V1.0_train+.json" # change to your train data path
 dev_data_path="data/QA/korean_culture_qa_V1.0_dev+.json" # change to your dev data path
