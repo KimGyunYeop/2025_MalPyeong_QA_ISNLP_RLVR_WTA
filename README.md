@@ -17,7 +17,7 @@ pip install flash-attn --no-build-isolation #issue많음
 
 ● flash-attn(pip install flash-attn --no-build-isolation)의 경우에는 사용자의 pc환경에 따라 다운로드 및 빌드가 매우 오래걸릴수 있다(본 참가팀은 4시간 소모되었으며 몇일 단위로 걸린다는 github issue 존재)
 
-● flash-attn이 설치 불가능한 경우 사전학습 모델을 loading하는 과정에서 “attn_implementation= "flash_attention_2"”를 주석처리하면 작동하지만 실험 시간이 증가하며 결과값이 미세하게 다르게나올 수 있다. (reproduce_test code 재현결과 test set의 서술형 200문항 중 25개의 답안에서 약간의 차이 발생)
+● flash-attn이 설치 불가능한 경우 사전학습 모델을 loading하는 과정에서 “attn_implementation= "flash_attention_2"”를 주석처리하거나 --no_flash_attention을 argument로 입력하면 작동하지만 실험 시간이 증가하며 결과값이 미세하게 다르게나올 수 있다. (reproduce_test code 재현결과 test set의 서술형 200문항 중 25개의 답안에서 약간의 차이 발생)
 
 ● flash attention의 경우 하드웨어 환경 및 가상환경에 따라 작동 방식 및 여부가 다른데, 이를 fallback으로 처리하는 과정에서 beam search 환경에서는 결과가 크게 달라지기도한다.
 
@@ -29,7 +29,7 @@ pip install flash-attn --no-build-isolation #issue많음
 
 학습용은 주어진 train dataset만을 사용하였으며 dev dataset으로 내부평가 test dataset으로 시스템에 제출하였다.
 
-데이터셋은 https://kli.korean.go.kr/benchmark/taskOrdtm/taskList.do?taskOrdtmId=180&clCd=END_TASK&subMenuId=sub01 에서 신청해서 다운로드받는다.
+데이터셋은 https://kli.korean.go.kr/benchmark/taskOrdtm/taskList.do?taskOrdtmId=180&clCd=END_TASK&subMenuId=sub01 에서 신청해서 다운로드받는다. (현재 대회마감으로 다운로드 불가)
 
 본 레포지토리의 모든 코드는 아래의 데이터의 경로를 기반으로 작성되었다.
 
