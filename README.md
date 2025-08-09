@@ -81,7 +81,8 @@ CUDA_VISIBLE_DEVICES=0 python -u main.py \
 Midm의 시스템 프롬프트의 날짜정보를 하드코딩하여 완전재현 목적 
 ```
 bash reproduce_test.sh 
-# bash reproduce_test_no_flash_attn.sh #flash attention 환경 조성이 힘들거나 bash reproduce_test.sh 시 score가 재현이 안됐을시 시도
+# flash attention 환경 조성이 힘들거나 bash reproduce_test.sh 시 score가 재현이 안됐을시 시도
+# bash reproduce_test_no_flash_attn.sh 
 ```
 or
 ```
