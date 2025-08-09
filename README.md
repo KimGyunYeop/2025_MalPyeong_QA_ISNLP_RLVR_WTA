@@ -52,7 +52,7 @@ bash GRPO_train.sh
 or
 ```
 model_name="K-intelligence/Midm-2.0-Base-Instruct"
-python -u main.py \
+CUDA_LAUNCH_BLOCKING=0 python -u main.py \
     --model_name "$model_name" \
     --train \
     --lora_mode "lora" \
@@ -89,7 +89,7 @@ bash reproduce_test_no_flash_attn.sh
 or
 ```
 adapter_path="GyunYeop/midm-base-GRPO-tuning-KoreanCultureQA"
-python -u reproduce_test.py \
+CUDA_LAUNCH_BLOCKING=0 python -u reproduce_test.py \
     --adapter_path "$adapter_path" \
     --no_flash_attention \
     --device "cuda:0"
@@ -107,7 +107,7 @@ bash test_no_flash_attn.sh
 or
 ```
 adapter_path="GyunYeop/midm-base-GRPO-tuning-KoreanCultureQA"
-python -u test.py \
+CUDA_LAUNCH_BLOCKING=0 python -u test.py \
     --adapter_path "$adapter_path" \
     --no_flash_attention \
     --num_beams 5 \
@@ -120,7 +120,7 @@ bash LoRA_train.sh
 ```
 or
 ```
-python -u main.py \
+CUDA_LAUNCH_BLOCKING=0 python -u main.py \
     --model_name "$model_name" \
     --train \
     --num_train_epochs 15 \
