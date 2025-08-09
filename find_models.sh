@@ -24,3 +24,5 @@ for model_name in "${model_names[@]}"; do
         --run_name "findmodel" \
         --device "cuda:0"
 done
+
+python calculate_expanded_measurement.py --target_folder find_models

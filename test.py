@@ -268,6 +268,8 @@ def parse_args():
     parser.add_argument("--fewshot_mode", type=str, default="static", choices=["none", "mix_static", "static"], help="Mode for few-shot learning")
     parser.add_argument("--num_fewshot", type=int, default=5, help="Number of few-shot examples to use")
     
+    parser.add_argument("--no_flash_attention", action="store_true", help="Disable flash attention")
+    
     parser.add_argument("--run_name", type=str, default="test", help="Name of the run for logging purposes")
     
     return parser.parse_args()
@@ -287,13 +289,22 @@ def main():
     )
     
     # args.cache_dir = None
-    base_model = AutoModelForCausalLM.from_pretrained(args.model_name, 
-                                                    device_map=args.device, 
-                                                    cache_dir=args.cache_dir, 
-                                                    trust_remote_code=True,
-                                                    quantization_config=bnb_config,     # ★ QLoRA 핵심
-                                                    attn_implementation="flash_attention_2",  # Flash Attention 2
-                                                    )
+    if args.no_flash_attention:
+        base_model = AutoModelForCausalLM.from_pretrained(args.model_name, 
+                                                        device_map=args.device, 
+                                                        cache_dir=args.cache_dir, 
+                                                        trust_remote_code=True,
+                                                        quantization_config=bnb_config,     # ★ QLoRA 핵심
+                                                        # attn_implementation="flash_attention_2",  # Flash Attention 2
+                                                        )
+    else:
+        base_model = AutoModelForCausalLM.from_pretrained(args.model_name, 
+                                                        device_map=args.device, 
+                                                        cache_dir=args.cache_dir, 
+                                                        trust_remote_code=True,
+                                                        quantization_config=bnb_config,     # ★ QLoRA 핵심
+                                                        attn_implementation="flash_attention",  # Flash Attention
+                                                        )
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
     
     base_model = prepare_model_for_kbit_training(base_model)
