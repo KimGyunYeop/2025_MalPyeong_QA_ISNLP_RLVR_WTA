@@ -77,6 +77,7 @@ python -u main.py \
 - use_format_reward : ormat reward 적용
 - use_write_type_answer : Descriptive Answer Candidate 적용
 - wta_reward_stretegy "cand_max" : (A): None (B): cand_max (C):1 (D):cand_include 중 택 1
+- no_flash_attention : flash attention 사용하지 않을 시
 
 ### Proposed Methodology(reproduce test)
 
@@ -93,7 +94,6 @@ python -u reproduce_test.py \
     --no_flash_attention \
     --device "cuda:0"
 ```
-- no_flash_attention : flash attention 사용하지 않을 시
 
 ### Proposed Methodology(general test)
 일반 test
