@@ -109,7 +109,7 @@ or
 adapter_path="GyunYeop/midm-base-GRPO-tuning-KoreanCultureQA"
 python -u test.py \
     --adapter_path "$adapter_path" \
-    --no_flash_attention \#optional
+    --no_flash_attention \
     --num_beams 5 \
     --device "cuda:0"
 ```
