@@ -1,0 +1,16 @@
+# python == 3.12
+torch >= 2.7.0
+transformers >= 4.53.0
+peft >= 0.16.0
+bitsandbytes
+datasets
+evaluate
+wandb
+scikit-learn
+pandas
+bert-score
+konlpy
+mecab
+nltk
+tqdm
+# flash_attn # install after installing torch

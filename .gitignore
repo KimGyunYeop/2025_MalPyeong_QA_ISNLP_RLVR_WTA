@@ -1,0 +1,10 @@
+data/*
+output/*
+logs/*
+results/*
+wandb/*
+__pycache__/*
+cache/*
+*.out
+reproduce_result/*
+*tmp*
