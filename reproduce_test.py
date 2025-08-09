@@ -284,8 +284,6 @@ def parse_args():
     parser.add_argument("--prompt_mode", type=str, default="general", choices=["general"], help="Mode for prompt generation")
     parser.add_argument("--fewshot_mode", type=str, default="static", choices=["none", "mix_static", "static"], help="Mode for few-shot learning")
     parser.add_argument("--num_fewshot", type=int, default=5, help="Number of few-shot examples to use")
-    
-    parser.add_argument("--no_flash_attention", action="store_true", help="Disable flash attention")
 
     parser.add_argument("--run_name", type=str, default="reproduce_result", help="Name of the run for logging purposes")
 
@@ -334,11 +332,11 @@ def main():
     prompt_generator = PromptGenerator(args, args.train_data_path)
     if args.dev_data_path:
         dev_dataset_for_test = CustomDatasetForTest(args.dev_data_path, tokenizer, prompt_generator)
+        print(f"Dev dataset size: {len(dev_dataset_for_test)}")
     if args.test_data_path:
         test_dataset = CustomDatasetForTest(args.test_data_path, tokenizer, prompt_generator)
+        print(f"Test dataset size: {len(test_dataset)}")
     
-    print(f"Dev dataset size: {len(dev_dataset_for_test)}")
-    print(f"Test dataset size: {len(test_dataset)}")
     
     post_process_fn = None
     for key in MODEL_NAME_to_POST_FUNCTION.keys():
