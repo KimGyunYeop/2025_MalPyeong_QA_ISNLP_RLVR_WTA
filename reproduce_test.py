@@ -319,7 +319,7 @@ def main():
                                                         cache_dir=args.cache_dir, 
                                                         trust_remote_code=True,
                                                         quantization_config=bnb_config,     # ★ QLoRA 핵심
-                                                        attn_implementation="flash_attention",  # Flash Attention
+                                                        attn_implementation="flash_attention_2",  # Flash Attention
                                                         )
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
     generation_config= GenerationConfig.from_pretrained(args.model_name, cache_dir=args.cache_dir)

@@ -647,7 +647,7 @@ def main():
     )
     
     if args.no_flash_attention:
-        base_model = AutoModelForCausalLM.from_pretrained(args.model_name, 
+        model = AutoModelForCausalLM.from_pretrained(args.model_name, 
                                                         device_map=args.device, 
                                                         cache_dir=args.cache_dir, 
                                                         trust_remote_code=True,
@@ -655,12 +655,12 @@ def main():
                                                         # attn_implementation="flash_attention_2",  # Flash Attention 2
                                                         )
     else:
-        base_model = AutoModelForCausalLM.from_pretrained(args.model_name, 
+        model = AutoModelForCausalLM.from_pretrained(args.model_name, 
                                                         device_map=args.device, 
                                                         cache_dir=args.cache_dir, 
                                                         trust_remote_code=True,
                                                         quantization_config=bnb_config,     # ★ QLoRA 핵심
-                                                        attn_implementation="flash_attention",  # Flash Attention
+                                                        attn_implementation="flash_attention_2",  # Flash Attention
                                                         )
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
     generation_config= GenerationConfig.from_pretrained(args.model_name, cache_dir=args.cache_dir)

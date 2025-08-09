@@ -36,6 +36,7 @@ for model_name in "${model_names[@]}"; do
         --reward_scale 1.0 \
         --test \
         --testing_every_epoch 1 \
+        --no_flash_attention \
         --run_name "analysis" \
         --device "cuda:0"
 done
