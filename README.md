@@ -135,7 +135,7 @@ CUDA_VISIBLE_DEVICES=0 python -u main.py \
 ### 각 언어모델 비교하여 지식 량 평가 (모델기술서 표 3)
 사용된 언어모델: 
 ```
-bash find_model.sh
+bash find_models.sh
 python calculate_expanded_measurement.py --target_folder find_models
 ```
  
